@@ -2,6 +2,10 @@ name: Sync to Hugging Face hub
 on:
   push:
     branches: [main]
+    paths:
+      - ".gitattributes"
+      - ".github/workflows/deploy.yml"
+      - "services/api/**"
   workflow_dispatch:
 
 jobs:
@@ -17,20 +21,29 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          set -euo pipefail
+
           # Configure Git
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          
+
           # Initialize LFS
           git lfs install
-          
-          # We create a clean "deployment" branch with NO history.
-          # This avoids Hugging Face seeing the "regular file" in previous commits.
+
+          # Build the Hugging Face Space payload from the API service only.
+          rm -rf /tmp/yakusu-hf-space
+          mkdir -p /tmp/yakusu-hf-space
+          cp -R services/api/. /tmp/yakusu-hf-space/
+          cp .gitattributes /tmp/yakusu-hf-space/.gitattributes
+
+          # Commit the payload on a clean branch with no repository history.
           git checkout --orphan deploy-branch
           git rm --cached -r .
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -R /tmp/yakusu-hf-space/. .
           git add .gitattributes .gitignore Dockerfile README.md app requirements.txt
           git add -f models/manga-bubble-yolov8.pt
           git commit -m "Deploy current state"
-          
+
           # Push only this clean commit to Hugging Face
           git push --force https://Kevan562:$HF_TOKEN@huggingface.co/spaces/Kevan562/yakusu-api deploy-branch:main

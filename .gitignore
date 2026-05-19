@@ -1,16 +1,20 @@
-# Local Python environment
+# Dependencies
+node_modules/
 .venv/
 __pycache__/
 *.py[cod]
 
-# Local model/cache artifacts
-.cache/
-models/*.pt
-
-# Generated outputs from manual endpoint testing
-translated*.png
-runs/
+# Build output
+dist/
+build/
+.next/
+out/
 
 # Local settings
 .env
-AGENTS.md
+.env.*
+!.env.example
+
+# Generated files
+translated*.png
+runs/

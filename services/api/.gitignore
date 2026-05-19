@@ -1,0 +1,16 @@
+# Local Python environment
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local model/cache artifacts
+.cache/
+models/*.pt
+
+# Generated outputs from manual endpoint testing
+translated*.png
+runs/
+
+# Local settings
+.env
+AGENTS.md

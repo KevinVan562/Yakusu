@@ -2,6 +2,17 @@
 
 Monorepo for Yakusu.
 
+## Screenshots
+
+### Light Mode
+![Light Mode](docs/images/light_mode.png)
+
+### Dark Mode
+![Dark Mode](docs/images/dark_mode.png)
+
+### Results
+![Results](docs/images/results.png)
+
 ## Local Setup
 
 1. Copy environment files:

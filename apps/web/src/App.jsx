@@ -212,6 +212,8 @@ function App() {
                   <option value="">Use API settings</option>
                   <option value="gemini">Gemini</option>
                   <option value="openai">OpenAI</option>
+                  <option value="claude">Claude</option>
+                  <option value="groq">Groq</option>
                   <option value="local">Local</option>
                 </select>
               </label>

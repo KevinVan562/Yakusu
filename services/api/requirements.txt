@@ -7,3 +7,5 @@ manga-ocr
 ultralytics
 google-generativeai
 openai
+anthropic
+groq

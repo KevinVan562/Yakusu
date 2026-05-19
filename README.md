@@ -1,6 +1,15 @@
 # Yakusu
 
-Monorepo for Yakusu.
+Yakusu (訳す) is a modern, AI-powered manga translation workspace designed to streamline the scanlation workflow. It automates the tedious process of text detection, OCR, and typesetting, allowing you to go from raw Japanese scans to fully translated pages in seconds.
+
+## Key Features
+
+- **Automated Bubble Detection**: Uses YOLOv8 to precisely locate speech bubbles and text areas.
+- **High-Accuracy OCR**: Powered by `manga-ocr` for reliable Japanese text recognition.
+- **Flexible LLM Translation**: Support for Google Gemini, OpenAI, and local models via Ollama (defaulting to `gemma2:9b`).
+- **Smart Typesetting**: Automatically clears original text and renders translations with dynamic font sizing to fit bubbles perfectly.
+- **Modern UI**: A clean, centered React interface with full dark mode support.
+- **Chapter Processing**: Batch process entire chapters and download the results as a ZIP.
 
 ## Screenshots
 

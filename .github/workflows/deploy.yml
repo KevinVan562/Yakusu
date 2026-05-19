@@ -17,7 +17,7 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          # Install and configure LFS
-          git lfs install
-          # Push with LFS support
-          git push --force https://Kevan562:$HF_TOKEN@huggingface.co/spaces/Kevan562/yakusu-api main:main
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git remote add hf https://Kevan562:$HF_TOKEN@huggingface.co/spaces/Kevan562/yakusu-api
+          git push --force hf main

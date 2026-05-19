@@ -17,4 +17,7 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          # Install and configure LFS
+          git lfs install
+          # Push with LFS support
           git push --force https://Kevan562:$HF_TOKEN@huggingface.co/spaces/Kevan562/yakusu-api main:main

@@ -5,8 +5,10 @@ import {
   FileImage,
   Languages,
   Loader2,
+  Moon,
   Play,
   RefreshCw,
+  Sun,
   Upload,
 } from "lucide-react";
 
@@ -23,7 +25,17 @@ function App() {
   const [isReadingOcr, setIsReadingOcr] = useState(false);
   const [isStartingJob, setIsStartingJob] = useState(false);
   const [error, setError] = useState("");
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
 
   const sortedFiles = useMemo(() => {
     return [...files].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
@@ -138,13 +150,18 @@ function App() {
 
   return (
     <main className="app-shell">
+      <p className="eyebrow">Yakusu</p>
       <section className="workspace">
         <header className="topbar">
-          <div>
-            <p className="eyebrow">Yakusu</p>
-            <h1>Manga Chapter Workspace</h1>
+          <div className="header-left">
+            <h1>Manga Translator</h1>
           </div>
-          <div className="api-pill">{API_BASE_URL}</div>
+          <div className="header-right">
+            <div className="api-pill">{API_BASE_URL}</div>
+            <button className="icon-button" onClick={toggleTheme} title="Toggle dark mode">
+              {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+            </button>
+          </div>
         </header>
 
         <div className="layout">

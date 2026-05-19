@@ -21,7 +21,7 @@ Monorepo for Yakusu.
 
    ```bash
    ollama serve
-   ollama pull llama3.2
+   ollama pull gemma2:9b
    ```
 
 4. Start the API:

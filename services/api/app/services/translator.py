@@ -131,7 +131,7 @@ def get_translator(settings, provider=None, api_key=None, model_name=None, base_
     elif provider == "local":
         return OpenAITranslator(
             api_key=api_key or "ollama",
-            model_name=model_name or "llama3",
+            model_name=model_name or "gemma2:9b",
             base_url=base_url or "http://localhost:11434/v1"
         )
     

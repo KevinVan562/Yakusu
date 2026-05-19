@@ -155,6 +155,7 @@ function App() {
         <header className="topbar">
           <div className="header-left">
             <h1>Manga Translator</h1>
+            <p className="subtitle">Pro-tip: Try <strong>Groq</strong> with <em>llama-3.3-70b</em> for fast, free high-quality translations.</p>
           </div>
           <div className="header-right">
             <div className="api-pill">{API_BASE_URL}</div>

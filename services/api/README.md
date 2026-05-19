@@ -1,3 +1,12 @@
+---
+title: Yakusu API
+emoji: 📖
+colorFrom: indigo
+colorTo: blue
+sdk: docker
+pinned: false
+---
+
 # Yakusu API
 
 Python microservice for manga page text extraction and LLM-powered translation rendering.

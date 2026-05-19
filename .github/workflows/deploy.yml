@@ -17,7 +17,18 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          # Configure Git
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          git remote add hf https://Kevan562:$HF_TOKEN@huggingface.co/spaces/Kevan562/yakusu-api
-          git push --force hf main
+          
+          # Initialize LFS
+          git lfs install
+          
+          # We create a clean "deployment" branch with NO history.
+          # This avoids Hugging Face seeing the "regular file" in previous commits.
+          git checkout --orphan deploy-branch
+          git add .
+          git commit -m "Deploy current state"
+          
+          # Push only this clean commit to Hugging Face
+          git push --force https://Kevan562:$HF_TOKEN@huggingface.co/spaces/Kevan562/yakusu-api deploy-branch:main

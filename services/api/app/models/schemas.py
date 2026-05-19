@@ -18,3 +18,21 @@ class MangaOcrResponse(BaseModel):
     width: int
     height: int
     blocks: list[TextBlock]
+
+
+class TranslationJobPage(BaseModel):
+    page: int
+    url: str
+
+
+class TranslationJobStatusResponse(BaseModel):
+    job_id: str
+    status: str
+    total_pages: int
+    completed_pages: int
+    target_language: str
+    created_at: str
+    updated_at: str
+    error: str | None = None
+    pages: list[TranslationJobPage] = Field(default_factory=list)
+    result_zip_url: str | None = None

@@ -16,6 +16,10 @@ Python microservice for manga page text extraction and LLM-powered translation r
 
 - `POST /ocr`: accepts an uploaded manga page and returns a list of detected bubbles and their OCR text.
 - `POST /translate`: accepts an uploaded manga page and returns a PNG with translated text rendered into detected bubbles. Supports Gemini, OpenAI, and Local LLMs (Ollama).
+- `POST /translate/jobs`: accepts multiple uploaded manga pages and starts a background translation job.
+- `GET /translate/jobs/{job_id}`: returns translation progress and translated page URLs.
+- `GET /translate/jobs/{job_id}/pages/{page_number}`: returns a translated PNG page.
+- `GET /translate/jobs/{job_id}/result.zip`: returns all translated pages as a ZIP after the job completes.
 
 ## Configuration
 
@@ -50,3 +54,22 @@ curl -X POST http://127.0.0.1:8000/translate \
   -F "target_language=English" \
   -o translated_page.png
 ```
+
+## Async Chapter Translation
+
+Create a chapter translation job:
+
+```bash
+curl -X POST http://127.0.0.1:8000/translate/jobs \
+  -F "files=@tests/testpanel.jpg" \
+  -F "files=@tests/testpanel.jpg" \
+  -F "target_language=English"
+```
+
+Poll the returned `job_id`:
+
+```bash
+curl http://127.0.0.1:8000/translate/jobs/<job_id>
+```
+
+When pages appear in the `pages` array, the frontend can display each `url` as an image in manga-reader order.

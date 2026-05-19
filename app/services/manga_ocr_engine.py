@@ -11,12 +11,14 @@ class MangaOcrEngine:
         self.settings = settings or get_settings()
         self.manga_ocr = None
 
-    def extract_text(self, image: Image.Image) -> str:
-        # Load the model the first time this is called
+    def load_model(self) -> None:
         if self.manga_ocr is None:
             from manga_ocr import MangaOcr
-            # This might take a while to download on the first run!
+
             self.manga_ocr = MangaOcr()
+
+    def extract_text(self, image: Image.Image) -> str:
+        self.load_model()
 
         # Run OCR on the image crop
         text = self.manga_ocr(image)

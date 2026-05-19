@@ -14,8 +14,10 @@ RUN apt-get update && apt-get install -y \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Create a non-root user
-RUN useradd -m -u 1000 user
+# Create a non-root user and writable model/cache directories
+RUN useradd -m -u 1000 user \
+    && mkdir -p /home/user/.cache/huggingface /home/user/.cache/ultralytics \
+    && chown -R user:user /home/user/.cache
 USER user
 ENV PATH="/home/user/.local/bin:${PATH}"
 

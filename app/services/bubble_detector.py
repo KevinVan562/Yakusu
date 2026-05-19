@@ -19,11 +19,14 @@ class BubbleDetector:
         self.settings = settings or get_settings()
         self.model = None # We will load the model only when we need it
 
-    def detect(self, image: Image.Image) -> list[BubbleDetection]:
-        # Load the model if it hasn't been loaded yet
+    def load_model(self) -> None:
         if self.model is None:
             from ultralytics import YOLO
+
             self.model = YOLO(str(self.settings.yolo_model_path))
+
+    def detect(self, image: Image.Image) -> list[BubbleDetection]:
+        self.load_model()
 
         # Run the detection
         results = self.model.predict(

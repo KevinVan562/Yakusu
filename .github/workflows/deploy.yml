@@ -27,7 +27,9 @@ jobs:
           # We create a clean "deployment" branch with NO history.
           # This avoids Hugging Face seeing the "regular file" in previous commits.
           git checkout --orphan deploy-branch
-          git add .
+          git rm --cached -r .
+          git add .gitattributes .gitignore Dockerfile README.md app requirements.txt
+          git add -f models/manga-bubble-yolov8.pt
           git commit -m "Deploy current state"
           
           # Push only this clean commit to Hugging Face

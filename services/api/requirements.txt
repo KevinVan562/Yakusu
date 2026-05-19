@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pillow
+python-multipart
+pydantic-settings
+manga-ocr
+ultralytics
+google-generativeai
+openai

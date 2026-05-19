@@ -148,6 +148,7 @@ class GroqTranslator:
         prompt = get_translation_prompt(source_texts, target_language)
 
         try:
+            # Try with JSON mode first
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
@@ -162,8 +163,27 @@ class GroqTranslator:
                 results.append(TranslationResult(source_texts[i], str(translated_text)))
             return results
         except Exception as e:
-            print(f"!!! GROQ TRANSLATION ERROR: {e}")
-            return [TranslationResult(t, f"[Error: {t}]") for t in source_texts]
+            print(f"!!! GROQ ERROR: {e}")
+            # Fallback: try without JSON mode if the first one failed
+            try:
+                print("Attempting Groq fallback without JSON mode...")
+                response = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=[{"role": "user", "content": prompt}]
+                )
+                content = response.choices[0].message.content
+                translated_dict = json.loads(extract_json(content))
+                
+                results = []
+                for i in range(len(source_texts)):
+                    translated_text = translated_dict.get(str(i), source_texts[i])
+                    results.append(TranslationResult(source_texts[i], str(translated_text)))
+                return results
+            except Exception as e2:
+                print(f"!!! GROQ FALLBACK FAILED: {e2}")
+                if 'content' in locals():
+                    print(f"Raw Response: {content}")
+                return [TranslationResult(t, f"[Error: {t}]") for t in source_texts]
 
 def get_translator(settings, provider=None, api_key=None, model_name=None, base_url=None):
     provider = provider or settings.llm_provider
@@ -174,18 +194,18 @@ def get_translator(settings, provider=None, api_key=None, model_name=None, base_
     if provider == "gemini":
         return GeminiTranslator(
             api_key=api_key,
-            model_name=model_name or "models/gemini-2.0-flash"
+            model_name=model_name or "gemini-1.5-flash"
         )
     elif provider == "openai":
         return OpenAITranslator(
             api_key=api_key,
-            model_name=model_name or "gpt-4o",
+            model_name=model_name or "gpt-4o-mini",
             base_url=base_url
         )
     elif provider == "claude":
         return ClaudeTranslator(
             api_key=api_key,
-            model_name=model_name or "claude-3-5-sonnet-20240620"
+            model_name=model_name or "claude-3-haiku-20240307"
         )
     elif provider == "groq":
         return GroqTranslator(

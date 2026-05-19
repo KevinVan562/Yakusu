@@ -12,6 +12,8 @@ RUN apt-get update && apt-get install -y \
     libgl1 \
     libglib2.0-0 \
     wget \
+    fonts-noto-cjk \
+    fonts-dejavu-core \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user and writable model/cache directories

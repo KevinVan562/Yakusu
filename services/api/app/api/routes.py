@@ -44,6 +44,10 @@ async def process_ocr(file: UploadFile = File(...)):
 async def process_translation(
     file: UploadFile = File(...),
     target_language: str = Form("English"),
+    llm_provider: str | None = Form(None),
+    llm_api_key: str | None = Form(None),
+    llm_model_name: str | None = Form(None),
+    llm_base_url: str | None = Form(None),
 ) -> Response:
     img = await load_uploaded_image(file)
 
@@ -51,6 +55,10 @@ async def process_translation(
         translated_image = pipeline.render_translation(
             img,
             target_language=target_language,
+            llm_provider=llm_provider,
+            llm_api_key=llm_api_key,
+            llm_model_name=llm_model_name,
+            llm_base_url=llm_base_url,
         )
         output = io.BytesIO()
         translated_image.save(output, format="PNG")
@@ -71,6 +79,10 @@ async def process_translation(
 async def process_batch_translation(
     files: List[UploadFile] = File(...),
     target_language: str = Form("English"),
+    llm_provider: str | None = Form(None),
+    llm_api_key: str | None = Form(None),
+    llm_model_name: str | None = Form(None),
+    llm_base_url: str | None = Form(None),
 ) -> Response:
     """
     Accepts a list of images and returns a ZIP file containing 
@@ -81,15 +93,22 @@ async def process_batch_translation(
 
     # We will store the resulting image data in memory
     zip_buffer = io.BytesIO()
-    
+
     try:
         with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
             for i, file in enumerate(files):
                 # 1. Load the image
                 img = await load_uploaded_image(file)
-                
+
                 # 2. Process translation
-                translated_img = pipeline.render_translation(img, target_language)
+                translated_img = pipeline.render_translation(
+                    img,
+                    target_language=target_language,
+                    llm_provider=llm_provider,
+                    llm_api_key=llm_api_key,
+                    llm_model_name=llm_model_name,
+                    llm_base_url=llm_base_url,
+                )
                 
                 # 3. Save to a byte buffer
                 img_byte_arr = io.BytesIO()

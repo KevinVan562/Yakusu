@@ -11,7 +11,7 @@ settings = get_settings()
 
 app = FastAPI(title=settings.app_name)
 
-# Add CORS middleware
+# CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

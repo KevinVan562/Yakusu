@@ -21,7 +21,6 @@ class MangaTextPipeline:
     def __init__(self):
         self.detector = detector
         self.manga_ocr = ocr_engine
-        self.translator = get_translator(settings)
         self.typesetter = typesetter
 
     def extract_blocks(self, image: Image.Image) -> list[TextBlock]:
@@ -52,10 +51,27 @@ class MangaTextPipeline:
             )
         return blocks
 
-    def render_translation(self, image: Image.Image, target_language: str = "English") -> Image.Image:
+    def render_translation(
+        self,
+        image: Image.Image,
+        target_language: str = "English",
+        llm_provider: str | None = None,
+        llm_api_key: str | None = None,
+        llm_model_name: str | None = None,
+        llm_base_url: str | None = None,
+    ) -> Image.Image:
         """
         Translate the text and draw it back on the image
         """
+        # 0. Get the translator (dynamic or fallback to settings)
+        translator = get_translator(
+            settings,
+            provider=llm_provider,
+            api_key=llm_api_key,
+            model_name=llm_model_name,
+            base_url=llm_base_url,
+        )
+
         # 1. Detect bubbles and get OCR text
         detections = self.detector.detect(image)
         source_texts = []
@@ -68,7 +84,7 @@ class MangaTextPipeline:
                 bubbles_to_translate.append(d)
 
         # 2. Translate everything in one go
-        translations = self.translator.translate_many(source_texts, target_language)
+        translations = translator.translate_many(source_texts, target_language)
 
         # 3. Create the blocks for the typesetter
         render_blocks = []

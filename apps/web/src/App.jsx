@@ -11,6 +11,7 @@ import {
   Sun,
   Upload,
 } from "lucide-react";
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://kevan562-yakusu-api.hf.space";
 
@@ -313,6 +314,7 @@ function App() {
           </section>
         </div>
       </section>
+      <SpeedInsights />
     </main>
   );
 }
